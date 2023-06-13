@@ -49,14 +49,12 @@ import org.sonarsource.sonarlint.core.clientapi.backend.rules.RuleSplitDescripti
  */
 public class RuleDescriptionPanel extends Composite {
   private final String languageKey;
-  private final boolean useEditorFontSize;
 
-  public RuleDescriptionPanel(Composite parent, String languageKey, boolean useEditorFontSize) {
+  public RuleDescriptionPanel(Composite parent, String languageKey) {
     super(parent, SWT.NONE);
     setLayout(new GridLayout(1, false));
 
     this.languageKey = languageKey;
-    this.useEditorFontSize = useEditorFontSize;
   }
 
   public void updateRule(Either<RuleMonolithicDescriptionDto, RuleSplitDescriptionDto> description) {
@@ -69,14 +67,14 @@ public class RuleDescriptionPanel extends Composite {
   }
 
   public void updateMonolithicRule(RuleMonolithicDescriptionDto description) {
-    HTMLUtils.parseIntoElements(description.getHtmlContent(), this, languageKey, this.useEditorFontSize);
+    HTMLUtils.parseIntoElements(description.getHtmlContent(), this, languageKey);
   }
 
   public void updateSplitRule(RuleSplitDescriptionDto description) {
     var intro = description.getIntroductionHtmlContent();
     if (StringUtils.isNotBlank(intro)) {
       // introduction (optional)
-      HTMLUtils.parseIntoElements(intro, this, languageKey, this.useEditorFontSize);
+      HTMLUtils.parseIntoElements(intro, this, languageKey);
     }
 
     // tab view
@@ -91,8 +89,7 @@ public class RuleDescriptionPanel extends Composite {
       var content = tab.getContent();
       if (content.isLeft()) {
         // tab description
-        HTMLUtils.parseIntoElements(content.getLeft().getHtmlContent(), tabContent, languageKey,
-          this.useEditorFontSize);
+        HTMLUtils.parseIntoElements(content.getLeft().getHtmlContent(), tabContent, languageKey);
       } else {
         // context view
         var contextualDescription = content.getRight();
@@ -108,8 +105,7 @@ public class RuleDescriptionPanel extends Composite {
             contextualTabFolder.setSelection(contextualTabItem);
           }
 
-          HTMLUtils.parseIntoElements(contextualTab.getHtmlContent(), contextualTabContent, languageKey,
-            this.useEditorFontSize);
+          HTMLUtils.parseIntoElements(contextualTab.getHtmlContent(), contextualTabContent, languageKey);
           contextualTabItem.setControl(contextualTabContent);
         }
         contextualTabFolder.requestLayout();

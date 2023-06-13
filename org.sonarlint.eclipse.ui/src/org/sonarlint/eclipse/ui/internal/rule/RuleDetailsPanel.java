@@ -57,13 +57,12 @@ public class RuleDetailsPanel extends Composite {
   private final RuleHeaderPanel ruleHeaderPanel;
   @Nullable
   private RuleDescriptionPanel ruleDescriptionPanel;
-  private final boolean useEditorFontSize;
   @Nullable
   private Group ruleParamsPanel;
   private final Composite scrolledContent;
   private final ScrolledComposite scrollComposite;
 
-  public RuleDetailsPanel(Composite parent, boolean useEditorFontSize) {
+  public RuleDetailsPanel(Composite parent) {
     super(parent, SWT.NONE);
     setLayout(new GridLayout(1, false));
 
@@ -75,8 +74,6 @@ public class RuleDetailsPanel extends Composite {
     scrolledContent = new Composite(scrollComposite, SWT.NONE);
     scrolledContent.setLayout(new GridLayout(1, false));
     scrollComposite.setContent(scrolledContent);
-
-    this.useEditorFontSize = useEditorFontSize;
 
     ruleNameLabel = new Label(scrolledContent, SWT.NONE);
     ruleNameLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
@@ -185,7 +182,7 @@ public class RuleDetailsPanel extends Composite {
     if (ruleDescriptionPanel != null && !ruleDescriptionPanel.isDisposed()) {
       ruleDescriptionPanel.dispose();
     }
-    ruleDescriptionPanel = new RuleDescriptionPanel(scrolledContent, languageKey, useEditorFontSize);
+    ruleDescriptionPanel = new RuleDescriptionPanel(scrolledContent, languageKey);
     ruleDescriptionPanel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
     ruleDescriptionPanel.updateRule(description);
   }

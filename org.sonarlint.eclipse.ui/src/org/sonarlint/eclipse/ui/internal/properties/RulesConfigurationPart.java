@@ -115,7 +115,7 @@ public class RulesConfigurationPart {
     // RuleDetailsPanel inside the SashForm then the background is wrong. See https://www.eclipse.org/forums/index.php/t/1099071/
     var compositeToFixDarkTheme = new Composite(horizontalSplitter, SWT.NONE);
     compositeToFixDarkTheme.setLayout(new FillLayout());
-    ruleDetailsPanel = new RuleDetailsPanel(compositeToFixDarkTheme, false);
+    ruleDetailsPanel = new RuleDetailsPanel(compositeToFixDarkTheme);
     paramPanelParent = new Composite(horizontalSplitter, SWT.NONE);
     paramPanelParent.setLayout(new GridLayout());
     paramPanel = emptyRuleParam();

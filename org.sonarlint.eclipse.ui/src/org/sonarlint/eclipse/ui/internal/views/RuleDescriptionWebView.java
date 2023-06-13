@@ -63,7 +63,7 @@ public class RuleDescriptionWebView extends ViewPart implements ISelectionListen
   @Override
   public void createPartControl(Composite parent) {
     createToolbar();
-    ruleDetailsPanel = new RuleDetailsPanel(parent, true);
+    ruleDetailsPanel = new RuleDetailsPanel(parent);
 
     startListeningForSelectionChanges();
   }

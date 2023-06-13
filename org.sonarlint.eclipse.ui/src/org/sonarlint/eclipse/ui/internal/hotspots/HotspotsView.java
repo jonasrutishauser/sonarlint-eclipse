@@ -125,7 +125,6 @@ public class HotspotsView extends ViewPart {
     createHotspotTable();
 
     var tabFolder = new TabFolder(splitter, SWT.NONE);
-    tabFolder.setLayout(new GridLayout(1, false));
 
     var riskDescriptionTab = new TabItem(tabFolder, SWT.NONE);
     riskDescriptionTab.setText("What's the risk?");
@@ -193,6 +192,9 @@ public class HotspotsView extends ViewPart {
     fixRecommendationsScrolledComposite.setMinSize(
       fixRecommendationsScrolledContent.computeSize(
         fixRecommendationsScrolledComposite.getClientArea().width, SWT.DEFAULT));
+    riskDescriptionScrolledComposite.requestLayout();
+    vulnerabilityDescriptionScrolledComposite.requestLayout();
+    fixRecommendationsScrolledComposite.requestLayout();
   }
 
   @Nullable
@@ -371,7 +373,7 @@ public class HotspotsView extends ViewPart {
     if (riskDescriptionContent != null && !riskDescriptionContent.isDisposed()) {
       riskDescriptionContent.dispose();
     }
-    riskDescriptionContent = new RuleDescriptionPanel(riskDescriptionScrolledContent, languageKey, true);
+    riskDescriptionContent = new RuleDescriptionPanel(riskDescriptionScrolledContent, languageKey);
     riskDescriptionContent.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     ((RuleDescriptionPanel) riskDescriptionContent).updateMonolithicRule(
       new RuleMonolithicDescriptionDto(rule.getRiskDescription()));
@@ -379,7 +381,7 @@ public class HotspotsView extends ViewPart {
     if (vulnerabilityDescriptionContent != null && !vulnerabilityDescriptionContent.isDisposed()) {
       vulnerabilityDescriptionContent.dispose();
     }
-    vulnerabilityDescriptionContent = new RuleDescriptionPanel(vulnerabilityDescriptionScrolledContent, languageKey, true);
+    vulnerabilityDescriptionContent = new RuleDescriptionPanel(vulnerabilityDescriptionScrolledContent, languageKey);
     vulnerabilityDescriptionContent.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     ((RuleDescriptionPanel) vulnerabilityDescriptionContent).updateMonolithicRule(
       new RuleMonolithicDescriptionDto(rule.getVulnerabilityDescription()));
@@ -387,7 +389,7 @@ public class HotspotsView extends ViewPart {
     if (fixRecommendationsContent != null && !fixRecommendationsContent.isDisposed()) {
       fixRecommendationsContent.dispose();
     }
-    fixRecommendationsContent = new RuleDescriptionPanel(fixRecommendationsScrolledContent, languageKey, true);
+    fixRecommendationsContent = new RuleDescriptionPanel(fixRecommendationsScrolledContent, languageKey);
     fixRecommendationsContent.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     ((RuleDescriptionPanel) fixRecommendationsContent).updateMonolithicRule(
       new RuleMonolithicDescriptionDto(rule.getFixRecommendations()));
