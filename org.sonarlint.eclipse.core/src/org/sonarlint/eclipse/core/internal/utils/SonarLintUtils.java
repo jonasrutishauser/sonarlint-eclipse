@@ -19,28 +19,15 @@
  */
 package org.sonarlint.eclipse.core.internal.utils;
 
-import java.net.InetSocketAddress;
-import java.net.MalformedURLException;
-import java.net.Proxy;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.EnumSet;
 import java.util.Set;
 import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
-import okhttp3.Credentials;
-import okhttp3.OkHttpClient;
-import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.resources.IResource;
 import org.sonarlint.eclipse.core.internal.SonarLintCorePlugin;
 import org.sonarlint.eclipse.core.internal.extension.SonarLintExtensionTracker;
 import org.sonarsource.sonarlint.core.commons.Language;
 
-import static org.sonarlint.eclipse.core.internal.utils.StringUtils.defaultString;
-
 public class SonarLintUtils {
-
-  private static final String PROXY_AUTHORIZATION = "Proxy-Authorization";
 
   private SonarLintUtils() {
     // utility class, forbidden constructor
@@ -60,40 +47,6 @@ public class SonarLintUtils {
 
   public static String getPluginVersion() {
     return SonarLintCorePlugin.getInstance().getBundle().getVersion().toString();
-  }
-
-  public static OkHttpClient.Builder withProxy(String url, OkHttpClient baseClient) {
-    var newBuilder = baseClient.newBuilder()
-      .connectTimeout(30, TimeUnit.SECONDS)
-      .readTimeout(10, TimeUnit.MINUTES);
-    var proxyService = SonarLintCorePlugin.getInstance().getProxyService();
-    IProxyData[] proxyDataForHost;
-    try {
-      proxyDataForHost = proxyService.select(new URL(url).toURI());
-    } catch (MalformedURLException | URISyntaxException e) {
-      throw new IllegalStateException("Invalid URL for server: " + url, e);
-    }
-    if (proxyDataForHost.length > 0) {
-      var proxyData = proxyDataForHost[0];
-      if (proxyData.getHost() != null) {
-        var proxyType = IProxyData.SOCKS_PROXY_TYPE.equals(proxyData.getType()) ? Proxy.Type.SOCKS : Proxy.Type.HTTP;
-        newBuilder.proxy(new Proxy(proxyType, new InetSocketAddress(proxyData.getHost(), proxyData.getPort())));
-        if (proxyData.isRequiresAuthentication()) {
-          newBuilder.proxyAuthenticator((route, response) -> {
-            if (response.request().header(PROXY_AUTHORIZATION) != null) {
-              // Give up, we've already attempted to authenticate.
-              return null;
-            }
-            var proxyCredentials = Credentials.basic(defaultString(proxyData.getUserId(), ""), defaultString(proxyData.getPassword(), ""));
-            return response.request().newBuilder()
-              .header(PROXY_AUTHORIZATION, proxyCredentials)
-              .build();
-          });
-        }
-      }
-    }
-
-    return newBuilder;
   }
 
   /**

@@ -107,7 +107,8 @@ public class SonarLintBackendService {
         SonarLintGlobalConfiguration.buildStandaloneRulesConfig(),
         true,
         false,
-        false)).thenRun(() -> {
+        false,
+        "SonarLint Eclipse " + SonarLintUtils.getPluginVersion())).thenRun(() -> {
           SonarLintCorePlugin.getServersManager().addServerLifecycleListener(new IConnectedEngineFacadeLifecycleListener() {
             @Override
             public void connectionRemoved(IConnectedEngineFacade facade) {
